@@ -16,8 +16,6 @@ namespace BetterSinkholes
     /// </summary>
     public class Plugin : Plugin<Config>
     {
-        private Harmony harmony;
-
         /// <inheritdoc />
         public override string Author { get; } = "Thomasjosif, origially written by Blackruby";
 
@@ -33,20 +31,24 @@ namespace BetterSinkholes
         /// <inheritdoc />
         public override Version Version { get; } = new Version(4, 0, 0);
 
+        /// <summary>
+        /// Gets an instance of the <see cref="BetterSinkholes.EventHandlers"/> class.
+        /// </summary>
+        public EventHandlers EventHandlers { get; private set; }
+
         /// <inheritdoc />
         public override void OnEnabled()
         {
-            Config.FinalizeConfigs();
-            harmony = new Harmony($"thomasjosif.betterSinkholes.{DateTime.UtcNow.Ticks}");
-            harmony.PatchAll();
+            EventHandlers = new EventHandlers(Config);
+            Exiled.Events.Handlers.Player.WalkingOnSinkhole += EventHandlers.OnWalkingOnSinkhole;
             base.OnEnabled();
         }
 
         /// <inheritdoc />
         public override void OnDisabled()
         {
-            harmony.UnpatchAll();
-            harmony = null;
+            Exiled.Events.Handlers.Player.WalkingOnSinkhole -= EventHandlers.OnWalkingOnSinkhole;
+            EventHandlers = null;
             base.OnDisabled();
         }
     }

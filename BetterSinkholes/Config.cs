@@ -8,7 +8,6 @@
 namespace BetterSinkholes
 {
     using System.ComponentModel;
-    using BetterSinkholes.Patches;
     using Exiled.API.Features;
     using Exiled.API.Interfaces;
 
@@ -40,15 +39,5 @@ namespace BetterSinkholes
             Duration = 5,
             Show = false,
         };
-
-        /// <summary>
-        /// Forwards all the generated configs to the <see cref="DistanceChangedPatch"/> for local use.
-        /// </summary>
-        public void FinalizeConfigs()
-        {
-            DistanceChangedPatch.SlowDistance = SlowDistance * SlowDistance;
-            DistanceChangedPatch.TeleportDistance = TeleportDistance * TeleportDistance;
-            DistanceChangedPatch.TeleportMessage = TeleportMessage;
-        }
     }
 }
