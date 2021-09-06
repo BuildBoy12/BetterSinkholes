@@ -20,7 +20,7 @@ namespace BetterSinkholes
         /// <summary>
         /// Gets or sets the distance from the center of a sinkhole where a player gets teleported.
         /// </summary>
-        [Description("The distance from the center of a sinkhole where a player gets teleported.")]
+        [Description("The distance from the center of a sinkhole where a player gets teleported. This is limited to inside the sinkhole's range.")]
         public float TeleportDistance { get; set; } = 2f;
 
         /// <summary>

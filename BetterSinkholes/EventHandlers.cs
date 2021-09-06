@@ -40,6 +40,7 @@ namespace BetterSinkholes
             if (distance > teleportDistance)
                 return;
 
+            ev.IsAllowed = false;
             ev.Player.Position = Vector3.down * -1998.5f;
             ev.Player.EnableEffect(EffectType.Corroding);
             ev.Player.DisableEffect(EffectType.SinkHole);
