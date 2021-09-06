@@ -20,10 +20,10 @@ jobs:
       uses: carlosperate/download-file-action@v1.0.3
       with:
         file-url: 'https://www.exiled.host/build_deps/Dev.zip'
-        file-name: 'Dev.zip'
+        file-name: 'References.zip'
 
     - name: Extract Refs
-      run: ./7zip.exe e Dev.zip -oReferences -r -y
+      run: ./7zip.exe e References.zip -oReferences -r -y
 
     - name: Restore project
       run: dotnet restore -p:Configuration=Release
@@ -37,7 +37,7 @@ jobs:
            dotnet build -p:DeployToServer=false -p:Configuration=Release
         }
       env:
-        EXILED_REFERENCES: ${{ github.workspace }}/Dev
+        EXILED_REFERENCES: ${{ github.workspace }}/References
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
