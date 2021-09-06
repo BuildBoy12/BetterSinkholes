@@ -17,7 +17,6 @@ namespace BetterSinkholes
     /// </summary>
     public class EventHandlers
     {
-        private readonly float slowDistance;
         private readonly float teleportDistance;
         private readonly Broadcast teleportMessage;
 
@@ -27,7 +26,6 @@ namespace BetterSinkholes
         /// <param name="config">An instance of the <see cref="Config" /> class.</param>
         public EventHandlers(Config config)
         {
-            slowDistance = config.SlowDistance * config.SlowDistance;
             teleportDistance = config.TeleportDistance * config.TeleportDistance;
             teleportMessage = config.TeleportMessage;
         }
@@ -35,27 +33,17 @@ namespace BetterSinkholes
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnWalkingOnSinkhole(WalkingOnSinkholeEventArgs)"/>
         public void OnWalkingOnSinkhole(WalkingOnSinkholeEventArgs ev)
         {
-            ev.IsAllowed = false;
             if (ev.Player.IsScp && ev.Sinkhole.SCPImmune)
                 return;
 
             float distance = (ev.Player.Position - ev.Sinkhole.transform.position).sqrMagnitude;
-            if (distance <= teleportDistance)
-            {
-                ev.Player.Position = Vector3.down * -1998.5f;
-                ev.Player.EnableEffect(EffectType.Corroding);
-                ev.Player.DisableEffect(EffectType.SinkHole);
-                ev.Player.Broadcast(teleportMessage);
+            if (distance > teleportDistance)
                 return;
-            }
 
-            if (distance <= slowDistance)
-            {
-                ev.Player.EnableEffect(EffectType.SinkHole);
-                return;
-            }
-
+            ev.Player.Position = Vector3.down * -1998.5f;
+            ev.Player.EnableEffect(EffectType.Corroding);
             ev.Player.DisableEffect(EffectType.SinkHole);
+            ev.Player.Broadcast(teleportMessage);
         }
     }
 }

@@ -18,12 +18,6 @@ namespace BetterSinkholes
         public bool IsEnabled { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the distance from the center of a sinkhole where a player starts getting slowed.
-        /// </summary>
-        [Description("The distance from the center of a sinkhole where a player starts getting slowed.")]
-        public float SlowDistance { get; set; } = 5.25f;
-
-        /// <summary>
         /// Gets or sets the distance from the center of a sinkhole where a player gets teleported.
         /// </summary>
         [Description("The distance from the center of a sinkhole where a player gets teleported.")]
