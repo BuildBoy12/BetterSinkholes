@@ -41,6 +41,7 @@ namespace BetterSinkholes
                 return;
 
             ev.IsAllowed = false;
+            ev.Player.ReferenceHub.scp106PlayerScript.GrabbedPosition = ev.Player.Position;
             ev.Player.Position = Vector3.down * -1998.5f;
             ev.Player.EnableEffect(EffectType.Corroding);
             ev.Player.DisableEffect(EffectType.SinkHole);
