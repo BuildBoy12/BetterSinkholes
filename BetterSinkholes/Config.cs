@@ -24,9 +24,15 @@ namespace BetterSinkholes
         public float TeleportDistance { get; set; } = 2f;
 
         /// <summary>
-        /// Gets or sets the message to show when someone falls into the pocket dimension.
+        /// Gets or sets the amount of damage to deal to someone when they fall into the pocket dimension.
         /// </summary>
-        [Description("The message to show when someone falls into the pocket dimension.")]
+        [Description("Thea amount of damage to deal to someone when they fall into the pocket dimension")]
+        public float EntranceDamage { get; set; } = 40;
+
+        /// <summary>
+        /// Gets or sets the message to show to someone when they fall into the pocket dimension.
+        /// </summary>
+        [Description("The message to show to someone when they fall into the pocket dimension.")]
         public Broadcast TeleportMessage { get; set; } = new Broadcast
         {
             Content = "You've fallen into the pocket dimension!",

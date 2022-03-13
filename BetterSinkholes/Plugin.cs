@@ -9,46 +9,36 @@ namespace BetterSinkholes
 {
     using System;
     using Exiled.API.Features;
-    using HarmonyLib;
 
     /// <summary>
     /// The main plugin class.
     /// </summary>
     public class Plugin : Plugin<Config>
     {
-        /// <inheritdoc />
-        public override string Author { get; } = "Thomasjosif, origially written by Blackruby";
+        private EventHandlers eventHandlers;
 
         /// <inheritdoc />
-        public override string Name { get; } = "BetterSinkholes";
+        public override string Author => "Build";
 
         /// <inheritdoc />
-        public override string Prefix { get; } = "BSH";
+        public override Version RequiredExiledVersion { get; } = new Version(5, 0, 0);
 
         /// <inheritdoc />
-        public override Version RequiredExiledVersion { get; } = new Version(3, 0, 0);
-
-        /// <inheritdoc />
-        public override Version Version { get; } = new Version(4, 0, 0);
-
-        /// <summary>
-        /// Gets an instance of the <see cref="BetterSinkholes.EventHandlers"/> class.
-        /// </summary>
-        public EventHandlers EventHandlers { get; private set; }
+        public override Version Version { get; } = new Version(4, 0, 1);
 
         /// <inheritdoc />
         public override void OnEnabled()
         {
-            EventHandlers = new EventHandlers(Config);
-            Exiled.Events.Handlers.Player.WalkingOnSinkhole += EventHandlers.OnWalkingOnSinkhole;
+            eventHandlers = new EventHandlers(this);
+            Exiled.Events.Handlers.Player.WalkingOnSinkhole += eventHandlers.OnWalkingOnSinkhole;
             base.OnEnabled();
         }
 
         /// <inheritdoc />
         public override void OnDisabled()
         {
-            Exiled.Events.Handlers.Player.WalkingOnSinkhole -= EventHandlers.OnWalkingOnSinkhole;
-            EventHandlers = null;
+            Exiled.Events.Handlers.Player.WalkingOnSinkhole -= eventHandlers.OnWalkingOnSinkhole;
+            eventHandlers = null;
             base.OnDisabled();
         }
     }
