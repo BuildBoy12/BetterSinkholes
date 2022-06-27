@@ -26,10 +26,7 @@ namespace BetterSinkholes
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnWalkingOnSinkhole(WalkingOnSinkholeEventArgs)"/>
         public void OnWalkingOnSinkhole(WalkingOnSinkholeEventArgs ev)
         {
-            if (ev.Player.SessionVariables.ContainsKey("IsNPC"))
-                return;
-
-            if (ev.Player.IsScp && ev.Sinkhole.SCPImmune)
+            if (ev.Player.IsScp || ev.Player.SessionVariables.ContainsKey("IsNPC"))
                 return;
 
             if ((ev.Player.Position - ev.Sinkhole.transform.position).sqrMagnitude > plugin.Config.TeleportDistance * plugin.Config.TeleportDistance)
