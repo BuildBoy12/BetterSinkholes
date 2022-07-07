@@ -30,14 +30,16 @@ namespace BetterSinkholes
         public override void OnEnabled()
         {
             eventHandlers = new EventHandlers(this);
-            Exiled.Events.Handlers.Player.WalkingOnSinkhole += eventHandlers.OnWalkingOnSinkhole;
+            Exiled.Events.Handlers.Player.EnteringEnvironmentalHazard += eventHandlers.OnEnteringEnvironmentalHazard;
+            Exiled.Events.Handlers.Player.StayingOnEnvironmentalHazard += eventHandlers.OnStayingOnEnvironmentalHazard;
             base.OnEnabled();
         }
 
         /// <inheritdoc />
         public override void OnDisabled()
         {
-            Exiled.Events.Handlers.Player.WalkingOnSinkhole -= eventHandlers.OnWalkingOnSinkhole;
+            Exiled.Events.Handlers.Player.EnteringEnvironmentalHazard -= eventHandlers.OnEnteringEnvironmentalHazard;
+            Exiled.Events.Handlers.Player.StayingOnEnvironmentalHazard -= eventHandlers.OnStayingOnEnvironmentalHazard;
             eventHandlers = null;
             base.OnDisabled();
         }

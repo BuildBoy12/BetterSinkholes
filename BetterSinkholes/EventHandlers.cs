@@ -8,6 +8,7 @@
 namespace BetterSinkholes
 {
     using Exiled.API.Enums;
+    using Exiled.API.Features;
     using Exiled.Events.EventArgs;
 
     /// <summary>
@@ -23,23 +24,36 @@ namespace BetterSinkholes
         /// <param name="plugin">An instance of the <see cref="Plugin" /> class.</param>
         public EventHandlers(Plugin plugin) => this.plugin = plugin;
 
-        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnWalkingOnSinkhole(WalkingOnSinkholeEventArgs)"/>
-        public void OnWalkingOnSinkhole(WalkingOnSinkholeEventArgs ev)
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnEnteringEnvironmentalHazard(EnteringEnvironmentalHazardEventArgs)"/>
+        public void OnEnteringEnvironmentalHazard(EnteringEnvironmentalHazardEventArgs ev)
         {
-            if (ev.Player.IsScp || ev.Player.SessionVariables.ContainsKey("IsNPC"))
-                return;
+            if (ShouldAffect(ev.EnvironmentalHazard, ev.Player))
+                ev.IsAllowed = false;
+        }
 
-            if ((ev.Player.Position - ev.Sinkhole.transform.position).sqrMagnitude > plugin.Config.TeleportDistance * plugin.Config.TeleportDistance)
-                return;
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnStayingOnEnvironmentalHazard(StayingOnEnvironmentalHazardEventArgs)"/>
+        public void OnStayingOnEnvironmentalHazard(StayingOnEnvironmentalHazardEventArgs ev)
+        {
+            if (ShouldAffect(ev.EnvironmentalHazard, ev.Player))
+                ev.IsAllowed = false;
+        }
 
-            ev.IsAllowed = false;
-            ev.Player.DisableEffect(EffectType.SinkHole);
+        private bool ShouldAffect(EnvironmentalHazard environmentalHazard, Player player)
+        {
+            if (environmentalHazard is not SinkholeEnvironmentalHazard || player.IsScp || player.SessionVariables.ContainsKey("IsNPC"))
+                return false;
 
-            ev.Player.ReferenceHub.scp106PlayerScript.GrabbedPosition = ev.Player.Position;
-            ev.Player.EnableEffect(EffectType.Corroding);
+            if ((player.Position - environmentalHazard.transform.position).sqrMagnitude > plugin.Config.TeleportDistance * plugin.Config.TeleportDistance)
+                return false;
 
-            ev.Player.Hurt(plugin.Config.EntranceDamage, DamageType.PocketDimension);
-            ev.Player.Broadcast(plugin.Config.TeleportMessage);
+            player.DisableEffect(EffectType.SinkHole);
+
+            player.ReferenceHub.scp106PlayerScript.GrabbedPosition = player.Position;
+            player.EnableEffect(EffectType.Corroding);
+
+            player.Hurt(plugin.Config.EntranceDamage, DamageType.PocketDimension);
+            player.Broadcast(plugin.Config.TeleportMessage);
+            return true;
         }
     }
 }
